@@ -5,7 +5,7 @@ const containerStyle = {
 
 export function Layout({ children }) {
     return (
-        <div style={containerStyle} className="space-y-4 pt-4">
+        <div style={containerStyle} className="h-screen space-y-4 pt-4 flex flex-col">
             {children}
         </div>
     )
