@@ -5,7 +5,7 @@
   "source": "index.html",
   "scripts": {
     "dev": "parcel serve",
-    "build": "parcel build"
+    "build": "parcel build --dist-dir docs"
   },
   "keywords": [],
   "author": "Zuodong Xu<hi@xzd.me>",
