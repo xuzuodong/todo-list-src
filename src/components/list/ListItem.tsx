@@ -21,7 +21,13 @@ export function ListItem({ index, item }) {
         dispatch(change({ index, newItem: { ...item, done: !item.done } }))
     }
 
+    function commitEditing(newContent) {
+        dispatch(change({ index, newItem: { ...item, content: newContent } }))
+    }
+
     const [showRemoveIcon, setShowRemoveIcon] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
+    const [contentSnapshot, setContentSnapshot] = useState('')
 
     return (
         <p
@@ -29,16 +35,63 @@ export function ListItem({ index, item }) {
             onMouseMove={() => setShowRemoveIcon(true)}
             onMouseOut={() => setShowRemoveIcon(false)}
         >
-            <input type="checkbox" name="done" id={index} className="mr-2" checked={item.done} onChange={toggleDone} />
-            <label htmlFor="done" className="flex-grow">
-                {item.content}
-            </label>
-            <Icon
-                className={'cursor-pointer ' + (showRemoveIcon ? '' : 'hidden')}
-                icon="mdi:close"
-                color="indianred"
-                onClick={() => dispatch(remove(index))}
-            />
+            {
+                // checkbox
+                !isEditing && (
+                    <input
+                        type="checkbox"
+                        name="done"
+                        id={index}
+                        className="mr-2"
+                        checked={item.done}
+                        onChange={toggleDone}
+                    />
+                )
+            }
+
+            {
+                // content / content editor
+                isEditing ? (
+                    <input
+                        autoFocus
+                        onBlur={() => setIsEditing(false)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Escape') {
+                                setIsEditing(false)
+                            } else if (e.key === 'Enter') {
+                                commitEditing(contentSnapshot)
+                                setIsEditing(false)
+                            }
+                        }}
+                        value={contentSnapshot}
+                        onChange={(e) => setContentSnapshot(e.target.value)}
+                        className="w-full p-1"
+                    ></input>
+                ) : (
+                    <label
+                        htmlFor="done"
+                        className="flex-grow"
+                        onDoubleClick={() => {
+                            setContentSnapshot(item.content)
+                            setIsEditing(true)
+                        }}
+                    >
+                        {item.content}
+                    </label>
+                )
+            }
+
+            {
+                // delete button
+                !isEditing && (
+                    <Icon
+                        className={'cursor-pointer ' + (showRemoveIcon ? '' : 'hidden')}
+                        icon="mdi:close"
+                        color="indianred"
+                        onClick={() => dispatch(remove(index))}
+                    />
+                )
+            }
         </p>
     )
 }

@@ -14,8 +14,8 @@ export function Footer() {
             <ButtonGroup>
                 {items.map((label, index) => (
                     <Button
+                        className="px-4"
                         variant={showingType.toLowerCase() === label.toLowerCase() ? 'outlined' : 'text'}
-                        style={{ width: '90px' }}
                         key={index}
                         onClick={(_) => {
                             dispatch(changeShowingType(index === 0 ? 'all' : index === 1 ? 'active' : 'completed'))
