@@ -1,7 +1,8 @@
 import { useAppDispatch, useAppSelector } from '../hooks/useStore'
-import { changeShowingType } from '../store/todoListSlice'
+import { changeShowingType, removeAllCompleted } from '../store/todoListSlice'
 import { Button } from './base/Button'
 import { ButtonGroup } from './base/ButtonGroup'
+import { Icon } from './base/Icon'
 
 export function Footer() {
     const showingType = useAppSelector((state) => state.todoList.showingType)
@@ -10,7 +11,7 @@ export function Footer() {
     const items = ['All', 'Active', 'Completed']
 
     return (
-        <div className="border-t-1 border-gray border-solid">
+        <div className="border-t-1 border-gray border-solid flex justify-between items-center">
             <ButtonGroup>
                 {items.map((label, index) => (
                     <Button
@@ -25,6 +26,18 @@ export function Footer() {
                     </Button>
                 ))}
             </ButtonGroup>
+
+            <span
+                style={{ fontSize: '25px' }}
+                className="cursor-pointer px-1"
+                onClick={() => {
+                    if (window.confirm('Do you really want to clean all completed items?')) {
+                        dispatch(removeAllCompleted())
+                    }
+                }}
+            >
+                🧹
+            </span>
         </div>
     )
 }

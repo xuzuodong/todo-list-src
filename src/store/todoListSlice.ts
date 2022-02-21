@@ -22,8 +22,11 @@ export const todoListSlice = createSlice({
         remove: ({ list }, { payload: index }: PayloadAction<number>) => {
             list.splice(index, 1)
         },
+        removeAllCompleted: (state) => {
+            state.list = state.list.filter((item) => !item.done)
+        },
     },
 })
 
-export const { changeShowingType, add, change, remove } = todoListSlice.actions
+export const { changeShowingType, add, change, remove, removeAllCompleted } = todoListSlice.actions
 export const todoListReducer = todoListSlice.reducer
