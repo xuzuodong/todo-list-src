@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { v4 as uuid } from 'uuid'
 import { TodoItem } from '../types/TodoItem'
 
 type ShowingType = 'all' | 'active' | 'completed'
@@ -13,8 +14,12 @@ export const todoListSlice = createSlice({
         changeShowingType: (state, { payload: newType }: PayloadAction<ShowingType>) => {
             state.showingType = newType
         },
-        add: ({ list }, { payload: newItem }: PayloadAction<TodoItem>) => {
-            list.push(newItem)
+        add: ({ list }, { payload: content }: PayloadAction<string>) => {
+            list.push({
+                id: uuid(),
+                content,
+                done: false,
+            })
         },
         change: ({ list }, { payload }: PayloadAction<{ index: number; newItem: TodoItem }>) => {
             list[payload.index] = payload.newItem

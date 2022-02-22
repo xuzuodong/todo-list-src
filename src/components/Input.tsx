@@ -12,7 +12,7 @@ export function Input() {
 
     function createNewItem() {
         if (!textValue) return
-        dispatch(add({ content: textValue, done: false }))
+        dispatch(add(textValue))
         setText('')
     }
 
