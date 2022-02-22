@@ -1,28 +1,13 @@
-import { change, remove } from '../../store/todoListSlice'
-import { useAppDispatch, useAppSelector } from '../../hooks/useStore'
+import { changeContent, remove, toggleDone } from '../../store/todoListSlice'
+import { useAppDispatch } from '../../hooks/useStore'
 import { useState } from 'react'
 import { Icon } from '../base/Icon'
 
 export function ListItem({ index, item }) {
-    const showingType = useAppSelector((state) => state.todoList.showingType)
     const dispatch = useAppDispatch()
 
-    const displayClass = (function () {
-        if (showingType === 'all') {
-            return 'flex'
-        } else if (showingType === 'active') {
-            return item.done ? 'hidden' : 'flex'
-        } else {
-            return item.done ? 'flex' : 'hidden'
-        }
-    })()
-
-    function toggleDone() {
-        dispatch(change({ index, newItem: { ...item, done: !item.done } }))
-    }
-
     function commitEditing(newContent) {
-        dispatch(change({ index, newItem: { ...item, content: newContent } }))
+        dispatch(changeContent({ id: item.id, content: newContent }))
     }
 
     const [showRemoveIcon, setShowRemoveIcon] = useState(false)
@@ -31,7 +16,7 @@ export function ListItem({ index, item }) {
 
     return (
         <p
-            className={displayClass + ' py-1 items-center font-lg'}
+            className="flex py-1 items-center font-lg"
             onMouseMove={() => setShowRemoveIcon(true)}
             onMouseOut={() => setShowRemoveIcon(false)}
         >
@@ -41,10 +26,10 @@ export function ListItem({ index, item }) {
                     <input
                         type="checkbox"
                         name="done"
-                        id={index}
+                        id={item.id}
                         className="mr-2"
                         checked={item.done}
-                        onChange={toggleDone}
+                        onChange={() => dispatch(toggleDone(item.id))}
                     />
                 )
             }
